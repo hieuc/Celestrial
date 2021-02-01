@@ -1,0 +1,45 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Celestrial</title>
+  
+    <script type="text/javascript" src="./assetmanager.js"></script>
+    <script type="text/javascript" src="./timer.js"></script>
+    <script type="text/javascript" src="./gameengine.js"></script>
+    <script type="text/javascript" src="./util.js"></script>
+    <script type="text/javascript" src="./animator.js"></script>
+    <script type="text/javascript" src="./scenemanager.js"></script>
+    <script type="text/javascript" src="./background.js"></script>
+    <script type="text/javascript" src="./projectiles/projectiles.js"></script>
+    <script type="text/javascript" src="./projectiles/scaleprojectiles.js"></script>
+    <script type="text/javascript" src="./projectiles/boomerang.js"></script>
+    <script type="text/javascript" src="./projectiles/beam.js"></script>
+    <script type="text/javascript" src="./bounds.js"></script>
+    <script type="text/javascript" src="./characters/wizzy.js"></script>
+    <script type="text/javascript" src="./characters/dummy.js"></script>
+    <script type="text/javascript" src="./characters/portal.js"></script>
+    <script type="text/javascript" src="./characters/oryx.js"></script>
+    <script type="text/javascript" src="./main.js"></script>
+
+    <style>
+        body {
+            background: #0f0f0f;
+            text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+    <canvas id="gameWorld" width="1200" height="1200" style="background: lightgray; border: 1px solid black" autofocus tabindex=1></canvas>
+    <br>
+    <label for="debug">Debug</label>
+    <input type="checkbox" id="debug" onclick="check()">
+    <script>
+        function check() {
+            PARAMS.debug = document.getElementById('debug').checked;
+        }
+    </script>
+</body>
+</html>
