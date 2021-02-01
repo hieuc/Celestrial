@@ -18,10 +18,11 @@ ASSET_MANAGER.downloadAll(function () {
 	PARAMS.canvas_height = canvas.height;
 	PARAMS.default_projectile = {spritesheet: ASSET_MANAGER.getAsset("./sprites/projectiles.png"), sx : 96, sy : 96}
 	PARAMS.debug = document.getElementById("debug").checked;
-
-	new SceneManager(gameEngine);
+	PARAMS.music = document.getElementById("music").checked;
 
 	gameEngine.init(ctx);	
+
+	new SceneManager(gameEngine);
 
 	gameEngine.start();
 });

@@ -7,17 +7,17 @@ class SceneManager {
         this.rotation = 0;
         this.char;
         this.dummy;
-
-        this.loadMap();
     };
 
     update() {
-
-        this.x = this.char.x - PARAMS.canvas_width/2 + 25;
-        this.y = this.char.y - PARAMS.canvas_height/2 + 25;
+        if (this.game.started) {
+            this.x = this.char.x - PARAMS.canvas_width/2 + 25;
+            this.y = this.char.y - PARAMS.canvas_height/2 + 25;
+        }
     };
 
     loadMap() {
+        this.draw = function (){};
         this.game.entities = [];
         var b = 8;  // unit size
         var scale = 4;
@@ -117,7 +117,7 @@ class SceneManager {
 
         var character = new Wizard(this.game, 624, 624); 
         this.char = character;
-        /*
+        
         setInterval(() => {
             for (var i = 0; i < 20; i++) {
                 var r = 580 * Math.sqrt(Math.random());
@@ -135,12 +135,19 @@ class SceneManager {
         this.game.addEntity(new Portal(this.game, 624, 624, 520, Math.PI * 1.5));
         
         this.game.addEntity(new Oryx(this.game, 624, 624, 210, 0));
-        */
+        
         this.game.addEntity(this.char);
+        //audio.play();
     }
 
     draw(ctx) {
-
+        ctx.font = "30px Comic Sans MS";
+        ctx.fillStyle = "white";
+        ctx.fillText("just dodge", PARAMS.canvas_width/3, PARAMS.canvas_height / 1.5);
+        ctx.fillText("WASD to move", PARAMS.canvas_width/4, PARAMS.canvas_height/3);
+        ctx.fillText("use checkbox below to mute music", PARAMS.canvas_width/4, PARAMS.canvas_height/2.5);
+        ctx.fillStyle = "red";
+        ctx.fillText("press any key to start", PARAMS.canvas_width/4, PARAMS.canvas_height/2);
     };
 
     randInt(min, max) {

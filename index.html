@@ -35,10 +35,21 @@
     <canvas id="gameWorld" width="1200" height="1200" style="background: lightgray; border: 1px solid black" autofocus tabindex=1></canvas>
     <br>
     <label for="debug">Debug</label>
-    <input type="checkbox" id="debug" onclick="check()">
+    <input type="checkbox" id="debug" onclick="checkDebug()">
+    <label for="music">Music</label>
+    <input type="checkbox" id="music" onclick="checkMusic()">
     <script>
-        function check() {
+        var audio = new Audio("./Apostasy.mp3");
+        audio.volume = 0.3;
+        audio.loop = true;
+
+        function checkDebug() {
             PARAMS.debug = document.getElementById('debug').checked;
+        }
+
+        function checkMusic() {
+            PARAMS.music = document.getElementById('music').checked;
+            audio.muted = PARAMS.music;
         }
     </script>
 </body>

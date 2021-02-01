@@ -6,6 +6,7 @@ class GameEngine {
         this.background = [];
         this.projectiles = [];
         this.ctx = null;
+        this.started = false;
 
         this.left = false;
         this.right= false;
@@ -31,7 +32,6 @@ class GameEngine {
 
     startInput() {
         var that = this;
-        var c = that.entities[that.entities.length-1];
 
         var getXandY = function (e) {
             var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
@@ -41,21 +41,26 @@ class GameEngine {
         }
 
         this.ctx.canvas.addEventListener("keydown", e => {
-            switch (e.key) {
-                case 'd':
-                    that.right = true;
-                    break;
-                case 'a':
-                    that.left = true;
-                    break;
-                case 's':
-                    that.down = true;
-                    break;
-                case 'w':
-                    that.up = true;
-                    break;
-                default:
-                    break;
+            if (!that.started) {
+                that.started = true;
+                that.camera.loadMap();
+            } else {
+                switch (e.key) {
+                    case 'd':
+                        that.right = true;
+                        break;
+                    case 'a':
+                        that.left = true;
+                        break;
+                    case 's':
+                        that.down = true;
+                        break;
+                    case 'w':
+                        that.up = true;
+                        break;
+                    default:
+                        break;
+                }
             }
         }, false);
 
@@ -85,7 +90,8 @@ class GameEngine {
 
         this.ctx.canvas.addEventListener("click", function (e) {
             that.click = getXandY(e);
-            c.startAttack(that.click);
+            if (that.started)
+                that.camera.char.startAttack(that.click);
         }, false);
 
         this.ctx.canvas.addEventListener("wheel", function (e) {
