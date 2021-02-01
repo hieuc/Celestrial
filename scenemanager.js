@@ -137,7 +137,7 @@ class SceneManager {
         this.game.addEntity(new Oryx(this.game, 624, 624, 210, 0));
         
         this.game.addEntity(this.char);
-        //audio.play();
+        audio.play();
     }
 
     draw(ctx) {
