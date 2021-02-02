@@ -58,7 +58,7 @@ class Portal {
                 var vel = {x: (that.center.x - that.x) / that.radius,
                                 y: (that.center.y - that.y) / that.radius}; 
 
-                var p = new Projectiles(that.game, that.x - 12, that.y - 12, vel, 2, 4500, false, pp);
+                var p = new Projectiles(that.game, that.x - 12, that.y - 12, vel, 1.7, 5000, false, pp);
                 that.game.addProjectile(p);
 
                 for (var j = -1; j < 2; j++) {

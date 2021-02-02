@@ -32,15 +32,15 @@
     </style>
 </head>
 <body>
-    <canvas id="gameWorld" width="1200" height="1200" style="background: lightgray; border: 1px solid black" autofocus tabindex=1></canvas>
+    <canvas id="gameWorld" width="800" height="800" style="background: lightgray; border: 1px solid black" autofocus tabindex=1></canvas>
     <br>
     <label for="debug">Debug</label>
     <input type="checkbox" id="debug" onclick="checkDebug()">
-    <label for="music">Music</label>
+    <label for="music">Mute music</label>
     <input type="checkbox" id="music" onclick="checkMusic()">
     <script>
         var audio = new Audio("./Apostasy.mp3");
-        audio.volume = 0.3;
+        audio.volume = 0.2;
         audio.loop = true;
 
         function checkDebug() {
@@ -51,6 +51,8 @@
             PARAMS.music = document.getElementById('music').checked;
             audio.muted = PARAMS.music;
         }
+
+        
     </script>
 </body>
 </html>

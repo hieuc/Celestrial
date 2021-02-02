@@ -8,6 +8,8 @@ ASSET_MANAGER.queueDownload("./sprites/wizard.png");
 ASSET_MANAGER.queueDownload("./sprites/dummy.png");
 ASSET_MANAGER.queueDownload("./sprites/objects.png");
 ASSET_MANAGER.queueDownload("./sprites/beam.png");
+ASSET_MANAGER.queueDownload("./sprites/oryx.png");
+ASSET_MANAGER.queueDownload("./sprites/wine.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');

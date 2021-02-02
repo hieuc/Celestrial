@@ -7,11 +7,12 @@ class GameEngine {
         this.projectiles = [];
         this.ctx = null;
         this.started = false;
-
         this.left = false;
         this.right= false;
         this.up = false;
         this.down = false;
+        this.rright = false;
+        this.rleft = false;
     };
 
     init(ctx) {
@@ -58,6 +59,19 @@ class GameEngine {
                     case 'w':
                         that.up = true;
                         break;
+                    case 'q':
+                        that.camera.rotateCam(Math.PI / 16);
+                        break;
+                    case 'e':
+                        that.camera.rotateCam(-Math.PI / 16);
+                        break;
+                    case 'x':
+                        that.camera.rotateCam(-that.camera.rotation);
+                        break;
+                    case 'c': {
+                        that.camera.updateCam();
+                        break;
+                    }  
                     default:
                         break;
                 }
@@ -77,6 +91,12 @@ class GameEngine {
                     break;
                 case 'w':
                     that.up = false;
+                    break;
+                case 'q':
+                    that.rleft = false;
+                    break;
+                case 'e':
+                    that.rright = false;
                     break;
                 default:
                     break;
@@ -160,7 +180,7 @@ class GameEngine {
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
 
-            if (!entity.removeFromWorld) {
+            if (entity && !entity.removeFromWorld) {
                 entity.update();
             }
         }

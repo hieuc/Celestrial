@@ -14,7 +14,7 @@ class Wizard {
 
         this.velocity = { x : 0, y : 0};
 
-        this.bound = new BoundingBox(this.x, this.y, 5 * this.scale, 5 * this.scale);
+        this.bound = new BoundingCircle(this.x, this.y, 2.5 * this.scale);
 
         this.animations = [];
 
@@ -85,9 +85,11 @@ class Wizard {
         }
         
         // position
-        this.handleCollision();
-        this.x += this.velocity.x * this.speed;
-        this.y += this.velocity.y * this.speed;
+        //this.handleCollision();
+        this.x += this.velocity.x * this.speed * Math.cos(this.game.camera.rotation) 
+                    + this.velocity.y * this.speed * Math.sin(this.game.camera.rotation);
+        this.y += this.velocity.y * this.speed * Math.cos(this.game.camera.rotation)
+                    - this.velocity.x * this.speed * Math.sin(this.game.camera.rotation);
         
         
         this.updateBound();
@@ -95,17 +97,17 @@ class Wizard {
 
     draw(ctx) {
         if (this.action === 2 && this.face === 1)
-            this.animations[this.action][this.face].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x - 3 * this.scale, this.y - this.game.camera.y, this.scale);
+            this.animations[this.action][this.face].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x - 3 * this.scale, this.y - this.game.camera.y, this.scale, -this.game.camera.rotation);
         else 
-        this.animations[this.action][this.face].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.scale);
+            this.animations[this.action][this.face].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.scale, -this.game.camera.rotation);
         if (PARAMS.debug) {
             this.bound.draw(this.game, ctx);
         }
     }
 
     updateBound() {
-        this.bound.x = this.x + 2 * this.scale;
-        this.bound.y = this.y + 3 * this.scale;
+        this.bound.x = this.x + 4 * this.scale;
+        this.bound.y = this.y + 4 * this.scale;
     }
 
     startAttack(click) {
@@ -132,10 +134,14 @@ class Wizard {
     calculateVel(click) {
         var dx = click.x - this.x + this.game.camera.x - 16;
         var dy = click.y - this.y + this.game.camera.y - 16;
+
+        
         var angle = Math.atan(dy/dx);
 
         var v = { x: Math.cos(angle),
                  y: Math.sin(angle)};
+
+        
         
         if (dx < 0)
             v.x *= -1;
@@ -143,7 +149,12 @@ class Wizard {
         if ((angle > 0 && dy < 0) || (angle < 0 && dy > 0))
             v.y *= -1;
         
-        return v;
+        // transformation for rotation
+        var c = {};
+        c.x = v.x * Math.cos(this.game.camera.rotation) + v.y * Math.sin(this.game.camera.rotation);
+        c.y = -v.x * Math.sin(this.game.camera.rotation) + v.y * Math.cos(this.game.camera.rotation);
+        
+        return c;
     }
 
     handleCollision() {
@@ -165,5 +176,4 @@ class Wizard {
             }
         });
     }
-    
 }

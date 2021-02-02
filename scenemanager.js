@@ -5,14 +5,23 @@ class SceneManager {
         this.x = 0;
         this.y = 0;
         this.rotation = 0;
+        this.centered = true;
         this.char;
         this.dummy;
+        
     };
 
     update() {
         if (this.game.started) {
-            this.x = this.char.x - PARAMS.canvas_width/2 + 25;
-            this.y = this.char.y - PARAMS.canvas_height/2 + 25;
+            this.x = this.char.x - PARAMS.canvas_width/2 + 16;
+            this.y = this.char.y - PARAMS.canvas_height/2 + 16 + (this.centered ? 0 : -180);
+            /*
+            if (this.game.rleft) {
+                this.rotateCam(0.05);  
+            } else if (this.game.rright) {
+                this.rotateCam(-0.05);
+            }
+            */
         }
     };
 
@@ -115,45 +124,47 @@ class SceneManager {
             }  
         }
 
-        var character = new Wizard(this.game, 624, 624); 
+        var character = new Wizard(this.game, 775, 775); 
         this.char = character;
         
-        setInterval(() => {
-            for (var i = 0; i < 20; i++) {
-                var r = 580 * Math.sqrt(Math.random());
-                var theta = Math.random() * 2 * Math.PI;
-    
-                var dx = r * Math.cos(theta);
-                var dy = r * Math.sin(theta); 
-                this.game.addProjectile(new Beam(this.game, 624 + dx, 624 + dy));
-            }
-        }, 3000);
         
-        this.game.addEntity(new Portal(this.game, 624, 624, 520, 0));
-        this.game.addEntity(new Portal(this.game, 624, 624, 520, Math.PI / 2));
-        this.game.addEntity(new Portal(this.game, 624, 624, 520, Math.PI));
-        this.game.addEntity(new Portal(this.game, 624, 624, 520, Math.PI * 1.5));
-        
-        this.game.addEntity(new Oryx(this.game, 624, 624, 210, 0));
-        
+
         this.game.addEntity(this.char);
         audio.play();
+        this.loadIntro();
     }
+
+    loadIntro() {
+        this.game.addEntity(new Oryx(this.game, 624, 624, 210, 0));
+    }
+
 
     draw(ctx) {
         ctx.font = "30px Comic Sans MS";
         ctx.fillStyle = "white";
-        ctx.fillText("just dodge", PARAMS.canvas_width/3, PARAMS.canvas_height / 1.5);
-        ctx.fillText("WASD to move", PARAMS.canvas_width/4, PARAMS.canvas_height/3);
-        ctx.fillText("use checkbox below to mute music", PARAMS.canvas_width/4, PARAMS.canvas_height/2.5);
+        ctx.fillText("just dodge", PARAMS.canvas_width/4, PARAMS.canvas_height / 1.5);
+        ctx.fillText("WASD to move, C to switch camera center", PARAMS.canvas_width/8, PARAMS.canvas_height/3);
+        ctx.fillText("use checkbox below to mute music", PARAMS.canvas_width/8, PARAMS.canvas_height/2.5);
         ctx.fillStyle = "red";
-        ctx.fillText("press any key to start", PARAMS.canvas_width/4, PARAMS.canvas_height/2);
+        ctx.fillText("press any key to start", PARAMS.canvas_width/6, PARAMS.canvas_height/2);
     };
 
     randInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    rotateCam(dtheta) {
+        var ctx = this.game.ctx;
+        ctx.translate(PARAMS.canvas_width/2, PARAMS.canvas_height/2);
+        ctx.rotate(dtheta);
+        ctx.translate(-PARAMS.canvas_width/2, -PARAMS.canvas_height/2);
+        this.rotation += dtheta;
+    }
+
+    updateCam() {
+        this.centered = !this.centered;
     }
 };
 

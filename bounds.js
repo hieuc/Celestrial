@@ -55,4 +55,11 @@ class BoundingCircle {
             return dx*dx+dy*dy<=(this.r*this.r);
         }
     }
+
+    draw(game, ctx) {
+        ctx.strokeStyle = 'Red';
+        ctx.beginPath();
+        ctx.arc(this.x - game.camera.x, this.y - game.camera.y, this.r, 0, Math.PI * 2, false);
+        ctx.stroke();
+    }
 }

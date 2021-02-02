@@ -4,12 +4,16 @@ class Projectiles {
 
         // if no spritesheet provided, use default
         if (custom) {
-            this.property = custom
+            this.property = custom;
         } else {
             this.property = PARAMS.default_projectile;
         }
 
-        this.bound = new BoundingCircle(this.x, this.y, 16);
+        this.spriteSize = 16;
+
+        this.bound = new BoundingCircle(this.x, this.y, this.spriteSize);
+
+        this.spin = false;
 
         this.scale = 2.5;
 
@@ -20,6 +24,11 @@ class Projectiles {
 
     loadAnimations() {
 
+    }
+
+    updateSpriteSize(size) {
+        this.spriteSize = size;
+        this.rotatedSprite = this.rotate(Math.atan(this.velocity.y / this.velocity.x) + (this.velocity.x <= 0 ? Math.PI : 0));
     }
 
     update() {
@@ -35,33 +44,34 @@ class Projectiles {
     }
 
     updateBound() {
-        this.bound.x = this.x + 8 * this.scale;
-        this.bound.y = this.y + 8 * this.scale;
+        this.bound.x = this.x + this.spriteSize * this.scale / 2;
+        this.bound.y = this.y + this.spriteSize * this.scale / 2;
     }
 
     draw(ctx) {
         //ctx.drawImage(this.spritesheet, 96, 96, 16, 16, this.x, this.y, 16 * this.scale, 16 * this.scale);
         //this.rotate(ctx, Math.atan(this.velocity.y / this.velocity.x) + (this.velocity.x <= 0 ? Math.PI : 0));
-        ctx.drawImage(this.rotatedSprite, this.x - this.game.camera.x, this.y - this.game.camera.y, 16 * this.scale, 16 * this.scale);
+        if (!this.spin)
+            ctx.drawImage(this.rotatedSprite, this.x - this.game.camera.x, this.y - this.game.camera.y, this.spriteSize * this.scale, this.spriteSize * this.scale);
+        else
+            this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, 
+                this.y - this.game.camera.y, this.scale, -this.game.camera.rotation); 
         if (PARAMS.debug) {
-            ctx.strokeStyle = 'Red';
-            ctx.beginPath();
-            ctx.arc(this.bound.x - this.game.camera.x, this.bound.y - this.game.camera.y, this.bound.r, 0, Math.PI * 2, false);
-            ctx.stroke();
+            this.bound.draw(this.game, ctx);
         }
     }
 
     rotate(angle) {
         var c2 = document.createElement("canvas");
-        c2.width = 16 * this.scale;
-        c2.height = 16 * this.scale;
+        c2.width = this.spriteSize * this.scale;
+        c2.height = this.spriteSize * this.scale;
         var ctx2 = c2.getContext("2d");
         ctx2.imageSmoothingEnabled = false;
         ctx2.save();
-        ctx2.translate(16 * this.scale / 2, 16 * this.scale / 2);
+        ctx2.translate(this.spriteSize * this.scale / 2, this.spriteSize * this.scale / 2);
         ctx2.rotate(angle);
-        ctx2.translate(-16 * this.scale / 2, -16 * this.scale / 2);
-        ctx2.drawImage(this.property.spritesheet, this.property.sx, this.property.sy, 16, 16, 0, 0, 16 * this.scale, 16 * this.scale);
+        ctx2.translate(-this.spriteSize * this.scale / 2, -this.spriteSize * this.scale / 2);
+        ctx2.drawImage(this.property.spritesheet, this.property.sx, this.property.sy, this.spriteSize, this.spriteSize, 0, 0, this.spriteSize * this.scale, this.spriteSize * this.scale);
 
         return c2;
     }
@@ -74,6 +84,8 @@ class Projectiles {
                     that.removeFromWorld = true;
                 } else if (e instanceof Wizard && !that.friendly) {
                     // do dmg here
+                    that.removeFromWorld = true;
+                } else if (that.friendly && e instanceof Oryx) {
                     that.removeFromWorld = true;
                 }
             }
